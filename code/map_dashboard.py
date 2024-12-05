@@ -13,9 +13,15 @@ ZOOM = 14                   # zoom level
 VMIN = 1000                 # min value for color scale
 VMAX = 5000                 # max value for color scale
 
-cuse_map = folium.Map(location=CUSE, Zoom_tart=ZOOM)
+
 df = pd.read_csv('./cache/top_locations_mappable.csv')
+
 geodf = gpd.GeoDataFrame(df, geometry=gpd.points_from_xy(df.lon, df.lat))
-cues_map = geodf.explore(m= cuse_map, marker_type = 'circle' , column='amount', cmap='YlOrRd', legend=True)
+cuse_map = folium.Map(location=CUSE, Zoom_tart=ZOOM)
+cues_map = geodf.explore(geodf['amount'], m= cuse_map,
+                        marker_type = 'circle' , column='amount',
+                        cmap='YlOrRd', vmin=VMIN, 
+                        vmax=VMAX, legend=True, Legend_name = 'Amount', 
+                        marker_kwd = {"radius": 10, "fill":True})
 
 sf.folium_static(cuse_map)
